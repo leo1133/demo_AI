@@ -1,0 +1,1 @@
+# Bối cảnh dự án cho AI & người mới
