@@ -49,17 +49,7 @@ Màn hình **AA000_Login** cho phép Quản trị viên / Người dùng (Admin 
 
 ---
 
-## 4. QUY TẮC NGHIỆP VỤ & DÙNG CHUNG (COMMON RULES & BUSINESS LOGIC)
-
-### 4.1 Quy Tắc Dùng Chung (Common Rules Ref)
-
-| Mã Quy Tắc | Tên Quy Tắc | Chi Tiết Quy Tắc (Specification Detail) |
-| :--- | :--- | :--- |
-| **CMR03** | Label Display Spec | • **Mục tiêu:** Hiển thị văn bản tĩnh (tiêu đề, mô tả, gợi ý) trên UI không có tương tác.<br>• **Phạm vi:** Áp dụng toàn ứng dụng cho văn bản tĩnh (Form titles, hints, support notes...). Không dùng cho buttons/links.<br>• **Tính năng:** Hiển thị văn bản không tab, tự động cập nhật ngôn ngữ khi chuyển đổi ngôn ngữ, hỗ trợ chèn dữ liệu động (dynamic variables). |
-| **CMR04** | Input Validation Rule Spec | • **Frontend UI:** Không thực hiện frontend validation kèm thông báo lỗi trực tiếp. Chặn hành vi không hợp lệ ngay tại UI (ví dụ: trường chỉ nhập số sẽ ngăn gõ chữ/ký tự đặc biệt).<br>• **Trường số (Numeric Input):** Chỉ cho phép 0-9. Ngăn chữ, ký tự đặc biệt, khoảng trắng ngay khi gõ.<br>• **Trường bắt buộc (Required):** Nếu để trống, nút bấm vẫn cho phép click, việc kiểm tra do Backend xử lý và trả về thông báo lỗi.<br>• **Độ dài (Max/Min Length):** Không kiểm tra real-time trên FE; kiểm tra khi Submit hoặc phía Server-side. |
-| **CMR41** | Required Fields Validation | • **Backend Check:** Phía Backend xác thực tất cả các trường bắt buộc để đảm bảo không bị trống hoặc thiếu.<br>• Nếu thiếu/trống: Backend trả về mã lỗi `CMMSG29` chi tiết cho trường vi phạm.<br>• **Frontend Display:** Nhận phản hồi lỗi từ Backend và hiển thị thông báo lỗi ngay bên cạnh/dưới trường nhập liệu tương ứng. |
-
-### 4.2 Luồng Xử Lý Chi Tiết Tính Năng Đăng Nhập (Login Processing Flow)
+## 4. Luồng Xử Lý Chi Tiết Tính Năng Đăng Nhập (Login Processing Flow)
 
 Khi người dùng nhập `email_user_id` và `password`, sau đó ấn nút **ログイン**:
 
@@ -75,16 +65,6 @@ Khi người dùng nhập `email_user_id` và `password`, sau đó ấn nút **�
    - Trả về mã xác thực: `access_token` và `refresh_token`.
    - **Ghi Log (Log access monitoring):** Ghi nhận nhật ký đăng nhập thành công (`Login status: success`) gồm đầy đủ thông tin: User ID, IP address, Login timestamp, Device/User-agent info.
    - Chuyển hướng người dùng sang Trang chủ (Home Page).
-
----
-
-## 5. DANH MỤC THÔNG BÁO LỖI (ERROR MESSAGES MASTER)
-
-| Error Code | Description | Title JP | Title EN | Japanese Message | English / Localized Message |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **MSG10** | ERR_INVALID_CRED | ログインエラー | Login Error | メールアドレス・IDまたはパスワードが一致しません。もう一度入力してください。 | The email address/ID or password does not match. Please try again. (Email/ID hoặc mật khẩu không đúng. Vui lòng thử lại.) |
-| **CMMSG29** | ERR_REQUIRED_FIELD | 入力 sai/未入力 | Required Field Missing | 必須項目が入力されていません。 | Required field is missing or empty. Please check the input values. |
-| **CMMSG54** | ERR_INVALID_FORMAT | フォーマットエラー | Invalid Input Format | 入力形式が gh文字/ số 不正です。 | Invalid character or format entered. Please re-enter. |
 
 ---
 
