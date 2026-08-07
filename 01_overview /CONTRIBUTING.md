@@ -150,10 +150,10 @@ AI-QA-Agent/
 + requirements/design/ => AI lấy thông tin về: UI element, component, design, variable..., layout, flow...
 + requirements/business-rules/ => AI lấy thông tin về: Business rule
 + requirements/release-notes/ => AI lấy thông tin về: Version, Release date, Feature, Bug fix, Known issue...
-+ requirements/existing-testcases/ => AI lấy thông tin về: Existing test case...
++ requirements/existing-testcases/ => Nơi người dùng đưa test case hiện tại của project vào
 
-#### B. Folder knowledge-base/ - KNOWLEDGE BASE cho AI: 
-- AI sẽ đọc toàn bộ tài liệu trong folder này để hiểu về hệ thống.
+#### B. Folder knowledge-base/ - AI lưu kiến thức đã phân tích:
+- Đây là output/working knowledge của AI. Output sẽ update qua từng step.
 + knowledge-base/project-overview.md => Tổng quan dự án
 + knowledge-base/actors.md => Actor của hệ thống
 + knowledge-base/modules.md => Module của hệ thống
@@ -164,3 +164,63 @@ AI-QA-Agent/
 + knowledge-base/database.md => Database schema
 + knowledge-base/risks.md => Risk của hệ thống
 + knowledge-base/open-questions.md => Open question
+
+### C. ai/prompts/ — Prompt của AI
+- Đây là nơi chứa prompt để điều khiển AI.
++ ai/prompts/system/qa-agent.md => Prompt của QA Agent
++ ai/prompts/requirement/analyze.md => Prompt của Requirement Agent
++ ai/prompts/requirement/review.md => Prompt của Requirement Agent
++ ai/prompts/qa/generate-questions.md => Prompt của QA Agent
++ ai/prompts/qa/generate-scenario.md => Prompt của QA Agent
++ ai/prompts/qa/generate-testcase.md => Prompt của QA Agent
++ ai/prompts/automation/analyze-testcase.md => Prompt của Automation Agent
++ ai/prompts/automation/generate-script.md => Prompt của Automation Agent
++ ai/prompts/automation/review-script.md => Prompt của Automation Agent
+
+### D. ai/agents/ — Code của AI Agent
+- Đây là nơi chứa code của AI Agent. 
++ ai/agents/requirement-agent.ts => Requirement Agent
++ ai/agents/qa-agent.ts => QA Agent
++ ai/agents/testcase-agent.ts => Testcase Agent
++ ai/agents/automation-agent.ts => Automation Agent
++ ai/agents/review-agent.ts => Review Agent
+
+### E. ai/schemas/ — Format chuẩn của AI output
+- Đây là nơi chứa schema của AI output. 
+- Mục đích là đảm bảo AI luôn trả output cùng một format chuẩn
++ ai/schemas/requirement.schema.json => Format của Requirement Agent
++ ai/schemas/scenario.schema.json => Format của QA Agent
++ ai/schemas/testcase.schema.json => Format của Testcase Agent
++ ai/schemas/automation.schema.json => Format của Automation Agent
+
+### F. qa/analysis/ - Output của AI
+- Đây là nơi AI lưu kết quả.
++ qa/analysis/requirement-analysis/ => Output của Requirement Agent
++ qa/analysis/qna/ => Output của QA Agent
++ qa/analysis/scenarios/ => Output của QA Agent
++ qa/analysis/testcases/ => Output của Testcase Agent
+
+### G. qa/traceability/ - Cầu nối giữa requirement và testcase
+- Đây là nơi lưu kết quả.
+- qa/traceability/requirement-testcase.json => Traceability giữa requirement và testcase
+
+### H. automation/ — Playwright
+- automation/tests/ => Test script
+- automation/pages/ => Page Object Model
+- automation/components/ => Page component
+- automation/fixtures/ => Playwright fixture
+automation/api/ => API test
+- automation/utils/ => Utility functions
+- automation/test-data/ => Test data
+
+### I. reports/ 
+- reports/playwright/ => Playwright report
+- reports/ai-analysis/ => AI analysis report
+- reports/coverage/ => Coverage report
+
+### J. scripts/ 
+- scripts/analyze-requirement.ts => Analyze requirement
+- scripts/generate-testcase.ts => Generate testcase
+- scripts/generate-automation.ts => Generate automation
+- scripts/run-ai-qa.ts => Run ai qa
+
