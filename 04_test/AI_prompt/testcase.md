@@ -1,4 +1,5 @@
-1.  Mục tiêu:
+
+### Mục tiêu:
 
 - Yêu cầu AI phân tích từng requirement đã extract từ SRS.
 - Tự lựa chọn kỹ thuật Test Design phù hợp:
@@ -12,33 +13,34 @@
 - Sinh Test Case có coverage tốt.
 - Tránh sinh test case trùng lặp hoặc chỉ dựa vào happy path.
 
-2. Cấu trúc prompt
 
-- Role (Vai trò): Xác định vai trò AI.
-- Context (Bối cảnh)
-- Task: Yêu cầu AI thực hiện:
-  ++ Phân tích từng requirement.
-  ++ Xác định loại logic cần kiểm thử:
-  +++ Input validation
-  +++ Business rule
-  +++ Workflow
-  +++ State change
-  +++ Combination condition
-  +++ Data variation
+### Cấu trúc prompt
 
-  ++ Chọn kỹ thuật Test Design phù hợp:
-  +++ Equivalence Partitioning
-  +++ Boundary Value Analysis
-  +++ Decision Table Testing
-  +++ State Transition Testing
-  +++ Use Case Testing
-  +++ Pairwise Testing
-  +++ Error Guessing
+1. Role (Vai trò): Xác định vai trò AI.
+2. Context (Bối cảnh)
+3. Task: Yêu cầu AI thực hiện:
+- Phân tích từng requirement.
+- Xác định loại logic cần kiểm thử:
+  + Input validation
+  + Business rule
+  + Workflow
+  + State change
+  + Combination condition
+  + Data variation
 
-  ++ Giải thích lý do chọn kỹ thuật.
-  ++ Sinh Test Case chi tiết.
+- Chọn kỹ thuật Test Design phù hợp:
+  + Equivalence Partitioning
+  + Boundary Value Analysis
+  + Decision Table Testing
+  + State Transition Testing
+  + Use Case Testing
+  + Pairwise Testing
+  + Error Guessing
 
-- Output
+- Giải thích lý do chọn kỹ thuật.
+- Sinh Test Case chi tiết.
+
+4. Output: File testcase gồm các trường
   | Test Case ID |
   | Preconditions |
   | Test Data |
@@ -46,13 +48,17 @@
   | Expected Result |
   | Priority |
 
-3. Kết quả mong muốn
+
+### Kết quả mong muốn
    AI tạo ra:
 
 - Mapping Requirement → Test Design Technique
 - Test Case chi tiết
 
-Prompt
+### Prompt
+
+
+Case 1: Viết testcase với file viewpoint
 Bạn là Senior QA Engineer / Test Architect.
 
 Bạn đã phân tích SRS và có danh sách Requirement như sau:
@@ -81,9 +87,9 @@ Nhiệm vụ:
 
 4. Giải thích lý do chọn kỹ thuật.
 
-5. Sinh Test Case chi tiết.
 
-Yêu cầu output:
+
+5. Sinh Test Case chi tiết với output là file .md với các trường: 
 
 | Test Case ID |
 | Preconditions |
