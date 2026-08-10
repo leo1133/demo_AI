@@ -6,108 +6,154 @@
   - AI không tự sáng tạo Test Case từ đầu
   - AI phải sử dụng: Requirement + Viewpoint + Rule sinh Test Case => tạo bộ testcase hoàn chỉnh
 
-# Prompt nên chia thành mấy loại?
+# Cấu trúc prompt
 
-Nên chia thành 4 prompt:
+1. Role (Vai trò)
+2. Context (Bối cảnh)
+3. Task: Yêu cầu AI thực hiện:
 
-- prompt 1: Viewpoint Learning
-- prompt 2: Requirement Analysis + Viewpoint Mapping
-- prompt 3: Test Case Generation
-- Prompt 4: Test Case Review + Coverage
+- Phân tích viewpoint
+- Phân tích requirement
+- Xác định UI Component
+- Mapping viewpoint
+- Phân tích Requirement Gap: Xác định các thông tin còn thiếu có thể ảnh hưởng đến Test Design.
+- Tạo test scenario
+- Tạo testcase
 
-## Prompt 1: Viewpoint Learning
+4. Nguyên tắc: Tuân thủ nguyên tắc
 
-#### Mục tiêu: Dạy AI hiểu:
+- Requirement quyết định: Hệ thống phải làm gì và Expected Behavior là gì.
+- Viewpoint quyết định: Những Test Condition nào cần được kiểm tra.
+- Nếu Viewpoint xác định một Test Condition phù hợp với Component nhưng Requirement không xác định Expected Behavior => vẫn phải tạo Test Scenario / Test Case.
+- Không được tự suy diễn Expected Result, nếu không rõ ràng phải đánh dấu Need Clarification.
 
-- Viewpoint là gì
-- Mỗi Viewpoint áp dụng cho Component nào
-- Viewpoint gồm những Test Item nào
-- Expected Result mẫu là gì
-- Khi nào Viewpoint applicable
-- Khi nào cần Requirement bổ sung
+5. Constraint:
 
-#### Cấu trúc prompt:
+- Requirement Constraint
+  - Requirement là nguồn sự thật chính đối với behavior của hệ thống.
+  - Không được tự tạo:
+    - Business Rule
+    - Validation Rule
+    - Expected Behavior
+    - Error Message
+    - Permission
+    - Role
+    - Data Rule
+    - File Type
+    - File Size
+    - Character Limit
+    - System Limit
+  - Nếu Requirement không cung cấp thông tin cần thiết → Đánh dấu Need Clarification.
 
-Bạn là Senior QA Engineer. Tôi cung cấp cho bạn một file Viewpoint dùng làm tiêu chuẩn kiểm thử UI.
+- Viewpoint Constraint
+  - Phải sử dụng Viewpoint Knowledge Base được cung cấp.
+  - Không được bỏ qua Viewpoint phù hợp.
+  - Không được tự tạo Viewpoint mới.
+  - Không được thay đổi ý nghĩa của Viewpoint.
+  - Không mặc định tất cả Viewpoint đều Applicable.
+  - Phải đánh giá Viewpoint dựa trên Requirement thực tế.
 
-Mục tiêu: Hãy đọc và xây dựng một Viewpoint Knowledge Base từ tài liệu được cung cấp. Viewpoint trong tài liệu được xem là QA Test Standard.
+- Parameter Constraint
+  - Nếu Viewpoint có Parameter như: {minlength}, {maxlength}, {max_file}, {max_record}, {maximum size}... nhưng Requirement không cung cấp giá trị → Không được tự đoán giá trị.
 
-Nhiệm vụ: Với mỗi Viewpoint, bạn hãy
+- Test Case Constraint: Mỗi Test Case phải:
+  - Có thể thực thi.
+  - Có Preconditions rõ ràng.
+  - Có Test Data khi cần.
+  - Có Test Steps rõ ràng.
+  - Có Expected Result có thể xác nhận.
+  - Có Requirement ID.
+  - Có Viewpoint ID.
+  - Không duplicate.
+  - Không có assumption không được hỗ trợ.
 
-- Xác định UI Component.
-- Xác định Test Item.
-- Xác định Confirm Content / Expected Result.
-- Xác định Test Data hoặc điều kiện đặc biệt nếu có.
-- Xác định các parameter/placeholder như: `{max_file}, {dung lượng tối đa}, {minlength}, {maxlength}, ...`
-- Xác định khi nào Viewpoint có thể áp dụng.
-- Xác định khi nào cần Requirement bổ sung.
+6. Output: Tạo các file có định dạng .md
 
-Quy tắc:
+- Requirement Gap Summary
+- Test Scenario
+- Test Case Summary
 
-- Không tự sửa nội dung Viewpoint.
-- Không tự thêm Business Rule.
-- Không tự suy diễn giá trị của placeholder.
-- Giữ nguyên ý nghĩa của Viewpoint.
-- Nếu thông tin chưa đủ, đánh dấu `Need Clarification`.
+# Ví dụ
 
-Output
-Viewpoint Knowledge Base
+Feature: Đăng ký tài khoản
 
-| Component | Test Item | Test Condition | Expected Result | Parameter |
-| --------- | --------- | -------------- | --------------- | --------- |
+Bạn là Senior QA Engineer / QA Test Design Specialist, có kinh nghiệm trong:
 
-Viewpoint Category
-Phân loại Viewpoint theo:
-
-- UI / Visual
-- Functional
-- Input Validation
-- Boundary
+- Requirement Analysis
+- Functional Testing
+- UI Testing
+- Validation Testing
+- Negative Testing
+- Boundary Testing
 - Error Handling
-- Interaction
-- Navigation
-- Data Display
-- Permission
-- Performance
-  Chú ý: Chỉ phân loại nếu nội dung Viewpoint thực sự hỗ trợ.
+- Test Scenario Design
+- Test Case Design
+- Risk-based Testing
+- Viewpoint-based Testing
 
-Parameter cần Requirement
+Bạn có nhiệm vụ sử dụng Requirement và Viewpoint Knowledge Base để phân tích chức năng và xây dựng bộ Test Case có độ bao phủ cao, có Traceability và có khả năng thực thi.
 
-| Parameter | Viewpoint | Requirement cần biết |
-| --------- | --------- | -------------------- |
+Bạn phải tư duy như một Senior QA, không chỉ kiểm tra những gì Requirement mô tả trực tiếp mà còn phải sử dụng Viewpoint để xác định các Test Condition cần được xem xét.
 
-Ambiguous Viewpoint
+Yêu cầu:
 
-- Liệt kê những Viewpoint chưa đủ thông tin để áp dụng chính xác.
-- Không tự bổ sung thông tin.
+- Phân tích viewpoint
+- Phân tích requirement
+- Xác định UI Component
+- Mapping viewpoint
+- Phân tích Requirement Gap: Xác định các thông tin còn thiếu có thể ảnh hưởng đến Test Design.
+- Tạo test scenario
+- Tạo testcase
 
-#### Kết quả: AI sẽ biến file Markdown hiện tại thành một Knowledge Base có cấu trúc.
+Nguyên tắc: Tuân thủ nguyên tắc
 
-Button
-├─ UI
-├─ Enable / Disable
-├─ Click
-└─ Double Click
+- Requirement quyết định: Hệ thống phải làm gì và Expected Behavior là gì.
+- Viewpoint quyết định: Những Test Condition nào cần được kiểm tra.
+- Nếu Viewpoint xác định một Test Condition phù hợp với Component nhưng Requirement không xác định Expected Behavior => vẫn phải tạo Test Scenario / Test Case.
+- Không được tự suy diễn Expected Result, nếu không rõ ràng phải đánh dấu Need Clarification.
 
-Textbox
-├─ UI
-├─ Input character
-├─ Boundary
-├─ Paste
-└─ Clear data
+Constraint:
 
-Pagination
-├─ UI
-├─ Page boundary
-├─ First
-├─ Previous
-├─ Next
-├─ Last
-└─ Page navigation
+- Requirement Constraint
+  - Requirement là nguồn sự thật chính đối với behavior của hệ thống.
+  - Không được tự tạo:
+    - Business Rule
+    - Validation Rule
+    - Expected Behavior
+    - Error Message
+    - Permission
+    - Role
+    - Data Rule
+    - File Type
+    - File Size
+    - Character Limit
+    - System Limit
+  - Nếu Requirement không cung cấp thông tin cần thiết → Đánh dấu Need Clarification.
 
-## Prompt 2: Requirement Analysis + Viewpoint Mapping
+- Viewpoint Constraint
+  - Phải sử dụng Viewpoint Knowledge Base được cung cấp.
+  - Không được bỏ qua Viewpoint phù hợp.
+  - Không được tự tạo Viewpoint mới.
+  - Không được thay đổi ý nghĩa của Viewpoint.
+  - Không mặc định tất cả Viewpoint đều Applicable.
+  - Phải đánh giá Viewpoint dựa trên Requirement thực tế.
 
-### Mục tiêu:
+- Parameter Constraint
+  - Nếu Viewpoint có Parameter như: {minlength}, {maxlength}, {max_file}, {max_record}, {maximum size}... nhưng Requirement không cung cấp giá trị → Không được tự đoán giá trị.
 
-- AI phải nhận diện được từ Requirement các viewpoint nào sẽ được áp dụng.
-- Mapping chính xác Requirement → UI Component → Applicable Viewpoint
+- Test Case Constraint: Mỗi Test Case phải:
+  - Có thể thực thi.
+  - Có Preconditions rõ ràng.
+  - Có Test Data khi cần.
+  - Có Test Steps rõ ràng.
+  - Có Expected Result có thể xác nhận.
+  - Có Requirement ID.
+  - Có Viewpoint ID.
+  - Không duplicate.
+  - Không có assumption không được hỗ trợ.
+
+Output: Tạo các file có định dạng .md
+
+- Requirement Gap Summary
+- Test Scenario
+- Test Case Summary
