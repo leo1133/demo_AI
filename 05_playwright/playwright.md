@@ -612,7 +612,7 @@ test("Login successfully", async ({ page }) => {
 });
 ```
 
-# Playwright Actions
+# Actions
 
 - Trong Playwright, Actions là các thao tác mà người dùng thực hiện trên UI, dùng để tương tác với element như click, nhập text, chọn option, upload file...
 - Các action thường được thực hiện thông qua Locator và Playwright sẽ tự động kiểm tra element có thể tương tác trước khi thực hiện action.
@@ -636,6 +636,7 @@ test("Login successfully", async ({ page }) => {
 ### 1. click()
 
 - Dùng để click button, link, checkbox, menu...
+- Playwright không chỉ đơn giản gửi event click. Nó thực hiện các kiểm tra như element có visible, enabled và có thể nhận interaction hay không trước khi click.
 - Cú pháp: `locator.click(options?)`
 - options:
   - `button`: 'left', 'right', 'middle'
@@ -669,3 +670,389 @@ test("Login successfully", async ({ page }) => {
   ```
 
 - Note: Mặc định, click sẽ đợi element hiện và có thể tương tác. Nếu muốn click mà không đợi, có thể dùng `locator.click({ force: true })`, tuy nhiên cần cân nhắc khi sử dụng vì có thể click vào element không mong muốn.
+
+### 2. fill()
+- Dùng để nhập dữ liệu vào: `<input>`, `<textarea>`, `<div contenteditable>`
+- fill() sẽ tự động: 
+  1. focus vào element
+  2. chọn hết nội dung hiện tại
+  3. nhập nội dung mới
+- Cú pháp: `locator.fill(value, options?)`
+- options:
+  - `strict`: Strict mode
+
+- Ví dụ:
+
+  ```ts
+  // Fill email
+  await page.getByLabel("Email").fill([EMAIL_ADDRESS]");
+
+  // Fill password
+  await page.getByLabel("Password").fill("123456");
+
+  // Fill với strict mode
+  await page.getByLabel("Email").fill([EMAIL_ADDRESS]", { strict: true });
+  ```
+### 3. type()
+- Là một action dùng để nhập text vào một element bằng cách mô phỏng việc gõ từng ký tự.
+- Cú pháp: `locator.type(text, options?)`
+- Khi dùng type, playwright sẽ mô phỏng quá trình nhập dữ liệu bằng cách gửi event keydown, keypress và keyup cho từng ký tự `t → e → s → t → @ → e → x → a → m → p → l → e → . → c → o → m`
+- type() khác fill() như thế nào?
+
+|                         | `fill()`              | `type()`        |
+| ----------------------- | --------------------- | --------------- |
+| Cách nhập               | Đặt giá trị trực tiếp | Gõ từng ký tự   |
+| Mô phỏng typing         | ❌                    | ✅              |
+| Có delay giữa ký tự     | Không                 | Có thể cấu hình | 
+| Code mới                | ✅ Khuyến nghị        | ❌ Deprecated   |
+| Test keyboard behavior  | Hạn chế               | Phù hợp hơn     |
+| Test input thông thường | ✅                    | Không cần       |
+
+- Khi nào nên dùng `fill()`? 
+  - Khi bạn chỉ cần nhập dữ liệu vào input và không quan tâm đến việc mô phỏng typing.
+  - Khi bạn muốn nhập dữ liệu nhanh chóng.
+- Khi nào nên dùng `type()`? 
+  - Khi bạn cần mô phỏng việc gõ từng ký tự.
+  - Khi bạn cần test keyboard behavior.
+  - Khi bạn cần nhập dữ liệu với delay.
+
+### 4. press()
+- Là một action dùng để nhấn phím.
+- Cú pháp: `locator.press(key, options?)`
+- key có thể là string hoặc array các string.
+- options:  
+  - `delay`: Thời gian chờ giữa các lần nhấn phím.
+  - `modifiers`: Các phím modifier cần giữ (shift, ctrl, alt, meta)
+
+- Các phím có thể sử dụng:
+  - Enter
+  - Escape
+  - Tab
+  - ArrowDown
+  - Backspace
+
+- Ví dụ:
+
+  ```ts
+  // Press Enter
+   await page.getByRole("button", { name: "Login" }).press("Enter");
+  ```
+- Có thể kết hợp modifier
+  ```ts
+    await page.getByLabel("Email").press("Control+A");
+    await page.getByLabel("Email").press("Control+C");
+  ```
+
+### 5. check() / uncheck()
+- Dùng cho checkbox / radio button
+- Cú pháp: `locator.check(options?)` / `locator.uncheck(options?)`
+- Ví dụ:
+  ```ts
+  // Check checkbox
+  await page.getByLabel("Remember me").check();
+
+  // Uncheck checkbox
+  await page.getByLabel("Remember me").uncheck();
+  ```
+- Note: 
+  - check() sẽ tự động check nếu checkbox chưa được check.
+  - uncheck() sẽ tự động uncheck nếu checkbox đã được check.
+  - Không nên dùng click() để thay thế check() khi đang test trạng thái checkbox.
+
+### 6. selectOption()
+- Là một action dùng để chọn option từ `<select>` element hoặc input có role `combobox`.
+- Cú pháp: `locator.selectOption(value|labels|values|indexes, options?)`
+- options:
+  - `strict`: Strict mode
+
+- Ví dụ:
+  ```ts
+  // Select by value
+  await page.getByRole("combobox").selectOption("VN");
+
+  // Select by label
+  await page.getByRole("combobox").selectOption({ label: "Vietnam" });
+
+  // Select by index
+  await page.getByRole("combobox").selectOption({ index: 1 });
+  ```
+- Note: selectOption() sẽ tự động clear option cũ trước khi chọn option mới.
+
+### 7. hover()
+- Là một action dùng để hover vào element.
+- Cú pháp: `locator.hover(options?)`
+- options:
+  - `position`: Vị trí hover
+  - `strict`: Strict mode
+
+- Ví dụ:
+  ```ts
+  // Hover vào element
+  await page.getByRole("button", { name: "Login" }).hover();
+
+  // Hover với position
+  await page.getByRole("button", { name: "Login" }).hover({ position: { x: 10, y: 10 } });
+  ```
+
+### 8. focus()
+- Là một action dùng để focus vào element.
+- Cú pháp: `locator.focus(options?)`
+- Ví dụ:
+  ```ts
+  // Focus vào element
+  await page.getByRole("button", { name: "Login" }).focus();
+  ```
+
+### 9. clear()
+- Là một action dùng để clear nội dung input.
+- Cú pháp: `locator.clear(options?)`
+- Ví dụ:
+  ```ts
+  // Clear nội dung input
+  await page.getByLabel("Email").clear();
+  ```
+
+### 10. setInputFiles()
+- Là một action dùng để upload file.
+- Cú pháp: `locator.setInputFiles(files, options?)`
+- files có thể là:
+  - string (path đến file)
+  - array các string
+- Ví dụ:
+  ```ts
+  // Upload file
+  await page.getByLabel("Upload").setInputFiles("test.pdf");
+
+  // Upload multiple files
+  await page.getByLabel("Upload").setInputFiles(["test1.pdf", "test2.pdf"]);
+  ```
+- Note: 
+  - setInputFiles() sẽ tự động clear option cũ trước khi chọn option mới.
+  - Nếu muốn upload file sau khi đã có file, dùng appendInputFiles()
+    - Cú pháp: `locator.appendInputFiles(files, options?)`
+    - Ví dụ:
+      ```ts
+      // Append file
+      await page.getByLabel("Upload").appendInputFiles("test.pdf");
+      ``` 
+
+### 11. dragTo()
+- Là một action dùng để kéo và thả element.
+- Cú pháp: `locator.dragTo(target, options?)`
+- target: Element đích để kéo đến
+- Ví dụ:
+  ```ts
+  // Kéo element đến đích
+  await page.getByRole("button", { name: "Drag me" }).dragTo(page.getByRole("button", { name: "Drop me" }));
+  ```
+### 12. Actions + Locator
+- Trong Playwright, Locator và Action thường đi cùng nhau:
+  - Locator → xác định element
+  - Action  → thao tác lên element 
+- Một Locator có thể thực hiện nhiều Action
+  ```ts
+  const email = page.getByLabel('Email');
+
+  await email.fill('test@example.com');
+  await email.clear();
+  await email.fill('admin@example.com');
+  await email.press('Enter');
+  ```
+
+# Assertion
+- Trong Playwright, Assertion là cơ chế dùng để xác nhận kết quả thực tế có đúng với kết quả mong đợi hay không.
+- Nếu `Action` là thực hiện hành động, thì `Assertion` là kiểm tra kết quả sau hành động.
+- Cấu trúc cơ bản: `await expect(actual).matcher(expected);`
+  - `actual`: giá trị thực tế cần kiểm tra, thường là **Locator**, **Value**, ...
+  - `expect()`: function nhận một `actual` (giá trị thực tế) và trả về một `Expect` object.
+  - `matcher`: method của `Expect` object, nó nhận một `expected` (giá trị mong đợi).
+- Một số `Matcher` phổ biến:
+  - expect(value).toBe(expected);
+  - expect(value).not.toBe(expected);
+  - expect(value).toEqual(expected);
+  - expect(value).toContain(expected);
+  - expect(value).toBeTruthy();
+  - expect(value).toBeFalsy();
+  - expect(value).toBeGreaterThan(10);
+  - expect(value).toBeLessThan(10);
+  - expect(value).toBeGreaterThanOrEqual(10);
+  - expect(value).toBeLessThanOrEqual(10);
+
+## Vì sao Playwright Assertion đặc biệt?
+- **Auto-waiting**: Playwright không kiểm tra đúng một lần. Thay vào đó, nó sẽ thực hiện Action và sau đó **chờ đợi** để kết quả trả về đúng với mong đợi. Nếu chưa đúng, nó sẽ lặp lại Action theo một khoảng thời gian nhất định cho đến khi timeout. Nếu hết timeout mà vẫn không xuất hiện -> FAIL. 
+ 
+- Ví dụ:
+   ```ts
+   // Wait for locator to be visible, then get its text content and assert it
+   await expect(page.locator('.loader')).toBeVisible();
+   await expect(page.locator('.loader').textContent()).toBe('Loaded');
+   ```
+## Các Assertion thường dùng
+- Kiểm tra element visible: `expect(locator).toBeVisible()`
+- Kiểm tra element hidden: `expect(locator).toBeHidden()`
+- Kiểm tra element disabled: `expect(locator).toBeDisabled()`
+- Kiểm tra element enabled: `expect(locator).toBeEnabled()`
+- Kiểm tra element checked: `expect(locator).toBeChecked()`
+- Kiểm tra element unchecked: `expect(locator).toBeUnchecked()`
+- Kiểm tra element selected: `expect(locator).toBeSelected()`
+- Kiểm tra element not selected: `expect(locator).toBeNotSelected()`
+- Kiểm tra element text content: `expect(locator).textContent()`
+- Kiểm tra element inner text: `expect(locator).innerText()`
+- Kiểm tra element value: `expect(locator).value()`
+- Kiểm tra element attribute: `expect(locator).toHaveAttribute(name, value)`
+- Kiểm tra element text: `expect(locator).toHaveText(text)`
+- Kiểm tra element text (contains): `expect(locator).toContainText(text)`
+- Kiểm tra element title: `expect(page).toHaveTitle(title)`
+- Kiểm tra element tồn tại trong DOM: `expect(locator).toBeAttached()`
+- Kiểm tra element không tồn tại trong DOM: `expect(locator).toBeDetached()`
+- Kiểm tra URL: `expect(page).toHaveURL(url)`
+- Kiểm tra số lượng element: `expect(locator).toHaveCount(count)`
+
+## toBe vs toEqual
+- `toBe()`: Kiểm tra strict equality (===). Chỉ dùng cho primitive values (string, number, boolean).
+- `toEqual()`: Kiểm tra deep equality (so sánh giá trị nội dung). Dùng cho object và array.
+
+## .not
+- `.not` là một property dùng để đảo ngược kết quả của một matcher.
+- Cú pháp: `expect(actual).not.matcher(expected);`
+- Ví dụ:
+  ```ts
+  // Kiểm tra element không visible
+  await expect(page.locator('.loader')).not.toBeVisible();
+  ```
+
+# Wait Strategy
+- Trong Playwright, `Wait Strategy` là cách Playwright chờ ứng dụng đạt đến trạng thái mong muốn trước khi thực hiện action hoặc assertion
+- Playwright chia thành 2 loại wait: `Auto Wait` và `Explicit Wait`
+ - Auto Wait là cơ chế Playwright tự động chờ element đạt trạng thái phù hợp trước khi thực hiện action.
+ - Explicit Wait là khi bạn chủ động yêu cầu Playwright chờ một điều kiện hoặc sự kiện cụ thể.
+
+- Playwright ưu tiên: `Wait for condition`, không `wait for time`.
+ ## Playwright ưu tiên:
+| Strategy               | Dùng khi                         |
+| ---------------------- | -------------------------------- |
+| **Auto-waiting**       | Action trên element              |
+| **Assertion waiting**  | Kiểm tra UI state                |
+| **Locator waiting**    | Chờ element xuất hiện/trạng thái |
+| **Navigation waiting** | Chờ page/navigation              |
+| **Explicit waiting**   | Những trường hợp đặc biệt        |
+
+### 1. Auto-waiting — Strategy quan trọng nhất
+- Khi bạn thực hiện một `Action` trên `Locator`, Playwright không click ngay lập tức.
+- Thay vào đó, nó sẽ tự kiểm tra element có:
+ - tồn tại
+ - visible
+ - stable
+ - enabled
+ - có thể nhận event
+hay chưa.
+- Ví dụ: 
+  ```ts
+  await page.getByLabel('Email').fill('test@gmail.com');
+  await page.getByLabel('Password').fill('123456');
+  await page.getByRole('button', { name: 'Login' }).click();
+  ```
+  không cần 
+  ```ts
+  await page.waitForTimeout(1000);
+  ```
+ => Đây là preferred strategy trong Playwright.
+
+### 2. Assertion Waiting
+- Assertion trong Playwright cũng có cơ chế auto-retry.
+- Playwright sẽ retry assertion cho đến khi: `Element visible` → `Assertion pass` hoặc `Timeout` → `Assertion fail`
+- Một số assertion thường dùng
+  - `await expect(locator).toBeVisible();`
+  - `await expect(locator).toBeHidden();`
+  - `await expect(locator).toBeEnabled();`
+  - `await expect(locator).toBeDisabled();`
+  - `await expect(locator).toHaveText('Success');`
+  - `await expect(locator).toHaveValue('test@gmail.com');`
+  - `await expect(locator).toHaveCount(5);`
+  - `await expect(page).toHaveURL('/dashboard');`
+
+- Ví dụ: 
+  ```ts
+  await page.getByRole('button', { name: 'Submit' }).click();
+  await expect(page.getByText('Order created')).toBeVisible();
+  ```
+  không cần 
+  ```ts
+  await page.waitForTimeout(1000);
+  ```
+
+### 3. Locator Waiting
+- Có thể sử dụng locator để chờ một trạng thái cụ thể.
+- Các state phổ biến: `visible`, `hidden`, `enabled`, `disabled`, `checked`, `unchecked`, `selected`, `not_selected`.
+- Cú pháp: `await locator.waitFor({ state: 'visible' });`
+- Ví dụ:
+ - Chờ element xuất hiện:
+    ```ts
+    await page.locator('.toast').waitFor({
+      state: 'visible'
+    });
+    ```
+ - Chờ loading biến mất:
+   ```ts
+   await page.locator('.loader').waitFor({
+     state: 'hidden'
+   });
+   ```
+ - Chờ element được remove khỏi DOM
+   ```ts
+   await page.locator('.modal').waitFor({
+     state: 'detached'
+   });
+   ```
+  
+### 4. Navigation Waiting
+- Khi thao tác dẫn đến navigation, playwright sẽ chờ URL đạt expected state.
+- Cú pháp: `await page.goto(url, { waitUntil: 'load' });`
+- Ví dụ: 
+  ```ts
+  await page.getByRole('button', { name: 'Login' }).click();
+  await expect(page).toHaveURL(/dashboard/);
+  ```
+### 5. Wait for API Response
+- `waitForResponse()` dùng khi muốn đợi một API request hoàn thành rồi mới tiếp tục test.
+- Cú pháp: `const response = await page.waitForResponse('**/api/users');`
+- **Lưu ý**: Phải tạo `waitForResponse()` trước action trigger API do API có thể đã được gửi/hoàn thành trước khi Playwright bắt đầu chờ.
+
+### 6. Explicit Waiting
+- Explicit waiting là chờ một điều kiện xảy ra trước khi tiếp tục.
+- Dùng khi không muốn dùng assertion hoặc locator waiting.
+- Cú pháp: `await page.waitForTimeout(1000);`
+- Ví dụ: `await expect(locator).toBeVisible()` 
+- Chỉ nên dùng khi thật sự cần chờ đợi một điều kiện nhất định.
+
+### 7. Wait for Load State
+- Playwright có 3 load state: `load`, `domcontentloaded`, `networkidle`.
+- Cú pháp: `await page.waitForLoadState('load');`
+- Ví dụ: 
+  ```ts
+  await page.goto('https://example.com');
+  await page.waitForLoadState('load');
+  ```
+
+### 8. waitForTimeout()
+- Là set 1 khoảng thời gian nhất định để chờ. Đây là hard wait. 
+- Khi hard wait, nó không quan tâm UI đã sẵn sàng chưa. Nên hạn chế dùng.
+- Cú pháp: `await page.waitForTimeout(1000);`
+- Ví dụ: 
+  ```ts
+  await page.goto('https://example.com');
+  await page.waitForTimeout(1000);
+  ```
+- Chỉ dùng khi không có cách nào khác để chờ.
+
+## Wait Strategy theo tình huống
+| Tình huống                         | Wait Strategy                       |
+| ---------------------------------- | ------------------------------------|
+| Thực hiện action trên element      | **Auto-waiting**                    |
+| Kiểm tra UI state                  | **Assertion Waiting**               |
+| Chờ element xuất hiện/trạng thái   | **Locator Waiting**                 |
+| Chờ navigation                     | **Navigation Waiting**              |
+| Chờ API response                   | **waitForResponse()**               |
+| Chờ 1 khoảng thời gian nhất định   | **waitForTimeout()** (hạn chế dùng) |
+
+# 
