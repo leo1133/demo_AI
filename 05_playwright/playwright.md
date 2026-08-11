@@ -108,15 +108,15 @@ File playwright.config (thường là .ts hoặc .js) là thành phần trung t�
 
 - Ví dụ:
 
-```ts
-// Tìm button có text "Submit"
-const submitButton = page.getByRole("button", { name: "Submit" });
-await submitButton.click();
+  ```ts
+  // Tìm button có text "Submit"
+  const submitButton = page.getByRole("button", { name: "Submit" });
+  await submitButton.click();
 
-// Tìm input có label "Email"
-const emailInput = page.getByRole("textbox", { name: "Email" });
-await emailInput.fill("[EMAIL_ADDRESS]");
-```
+  // Tìm input có label "Email"
+  const emailInput = page.getByRole("textbox", { name: "Email" });
+  await emailInput.fill("[EMAIL_ADDRESS]");
+  ```
 
 - Các role thường gặp:
   - button
@@ -147,19 +147,19 @@ await emailInput.fill("[EMAIL_ADDRESS]");
 
 - Ví dụ:
 
-```ts
-// Tìm element có text "Welcome"
-const welcomeElement = page.getByText("Welcome");
-await welcomeElement.click();
+  ```ts
+  // Tìm element có text "Welcome"
+  const welcomeElement = page.getByText("Welcome");
+  await welcomeElement.click();
 
-// Tìm element có text "Submit" chính xác (không match "Submit 2")
-const submitButton = page.getByText("Submit", { exact: true });
-await submitButton.click();
+  // Tìm element có text "Submit" chính xác (không match "Submit 2")
+  const submitButton = page.getByText("Submit", { exact: true });
+  await submitButton.click();
 
-// Tìm element có text "Login" không phân biệt chữ hoa chữ thường
-const loginElement = page.getByText("login", { ignoreCase: true });
-await loginElement.click();
-```
+  // Tìm element có text "Login" không phân biệt chữ hoa chữ thường
+  const loginElement = page.getByText("login", { ignoreCase: true });
+  await loginElement.click();
+  ```
 
 - Các locator thường gặp:
   - Login
@@ -185,21 +185,21 @@ await loginElement.click();
 
 - Ví dụ:
 
-```ts
-// Tìm input có placeholder "Email"
-const emailInput = page.getByPlaceholder("Email");
-await emailInput.fill("[EMAIL_ADDRESS]");
+  ```ts
+  // Tìm input có placeholder "Email"
+  const emailInput = page.getByPlaceholder("Email");
+  await emailInput.fill("[EMAIL_ADDRESS]");
 
-// Tìm input có placeholder "Username" chính xác
-const usernameInput = page.getByPlaceholder("Username", { exact: true });
-await usernameInput.fill("admin");
+  // Tìm input có placeholder "Username" chính xác
+  const usernameInput = page.getByPlaceholder("Username", { exact: true });
+  await usernameInput.fill("admin");
 
-// Tìm input có placeholder "Email" không phân biệt chữ hoa chữ thường
-const emailInputIgnoreCase = page.getByPlaceholder("email", {
-  ignoreCase: true,
-});
-await emailInputIgnoreCase.fill("[EMAIL_ADDRESS]");
-```
+  // Tìm input có placeholder "Email" không phân biệt chữ hoa chữ thường
+  const emailInputIgnoreCase = page.getByPlaceholder("email", {
+    ignoreCase: true,
+  });
+  await emailInputIgnoreCase.fill("[EMAIL_ADDRESS]");
+  ```
 
 ### 4. getByText() - Locator dựa trên text
 
@@ -216,19 +216,19 @@ await emailInputIgnoreCase.fill("[EMAIL_ADDRESS]");
 
 - Ví dụ:
 
-```ts
-// Tìm element có text "Welcome"
-const welcomeElement = page.getByText("Welcome");
-await welcomeElement.click();
+  ```ts
+  // Tìm element có text "Welcome"
+  const welcomeElement = page.getByText("Welcome");
+  await welcomeElement.click();
 
-// Tìm element có text "Submit" chính xác (không match "Submit 2")
-const submitButton = page.getByText("Submit", { exact: true });
-await submitButton.click();
+  // Tìm element có text "Submit" chính xác (không match "Submit 2")
+  const submitButton = page.getByText("Submit", { exact: true });
+  await submitButton.click();
 
-// Tìm element có text "Login" không phân biệt chữ hoa chữ thường
-const loginElement = page.getByText("login", { ignoreCase: true });
-await loginElement.click();
-```
+  // Tìm element có text "Login" không phân biệt chữ hoa chữ thường
+  const loginElement = page.getByText("login", { ignoreCase: true });
+  await loginElement.click();
+  ```
 
 - Khi nào nên dùng:
   - Tốt cho các element không mang tính interactive
@@ -388,27 +388,27 @@ await loginElement.click();
 
 - Ví dụ:
 
-```ts
-// Tìm element dựa trên CSS selector
-const loginElement = page.locator(".login");
-await loginElement.click();
+  ```ts
+  // Tìm element dựa trên CSS selector
+  const loginElement = page.locator(".login");
+  await loginElement.click();
 
-// Tìm element dựa trên XPath selector
-const loginElement = page.locator("//div[@class='login']");
-await loginElement.click();
+  // Tìm element dựa trên XPath selector
+  const loginElement = page.locator("//div[@class='login']");
+  await loginElement.click();
 
-// Tìm element có text "Login"
-const loginElement = page.locator(".login", { hasText: "Login" });
-await loginElement.click();
+  // Tìm element có text "Login"
+  const loginElement = page.locator(".login", { hasText: "Login" });
+  await loginElement.click();
 
-// Tìm element có element con có text "Login"
-const loginElement = page.locator(".login", { has: page.getByText("Login") });
-await loginElement.click();
+  // Tìm element có element con có text "Login"
+  const loginElement = page.locator(".login", { has: page.getByText("Login") });
+  await loginElement.click();
 
-// Tìm element thứ n
-const loginElement = page.locator(".login", { nth: 0 });
-await loginElement.click();
-```
+  // Tìm element thứ n
+  const loginElement = page.locator(".login", { nth: 0 });
+  await loginElement.click();
+  ```
 
 ## Khi nào nên dùng locator() instead of getBy\*()
 
@@ -513,38 +513,40 @@ await loginElement.click();
   Product A
   [Add to cart]
 
-Product B
-[Add to cart]
+  Product B
+  [Add to cart]
 
-Product C
-[Add to cart]
+  Product C
+  [Add to cart]
 
-```ts
-const product = page.getByRole("listitem").filter({ hasText: "Product B" });
-await product.getByRole("button", { name: "Add to cart" }).click();
-```
+  ```ts
+  const product = page.getByRole("listitem").filter({ hasText: "Product B" });
+  await product.getByRole("button", { name: "Add to cart" }).click();
+  ```
 
 ### 13. locator.and()
 
 - and() là một phương thức của locator cho phép bạn kết hợp nhiều locator để tìm element. Cú pháp: `locator1.and(locator2)`
 - Ví dụ: Tìm tất cả input có thuộc tính required
 
-```ts
-const requiredInputs = page
-  .locator("input")
-  .and(page.locator(":has([required])"));
-await requiredInputs.count();
-```
+  ```ts
+  const requiredInputs = page
+    .locator("input")
+    .and(page.locator(":has([required])"));
+  await requiredInputs.count();
+  ```
 
 ### 14. locator.or()
 
 - or() là một phương thức của locator cho phép bạn kết hợp nhiều locator để tìm element. Cú pháp: `locator1.or(locator2)`
 - Ví dụ: Tìm tất cả input có thuộc tính required hoặc email
 
-```ts
-const requiredInputs = page.locator("input").or(page.locator("[type='email']"));
-await requiredInputs.count();
-```
+  ```ts
+  const requiredInputs = page
+    .locator("input")
+    .or(page.locator("[type='email']"));
+  await requiredInputs.count();
+  ```
 
 ### Thứ tự ưu tiên Locator nên dùng
 
@@ -1100,4 +1102,22 @@ test("Login successfully", async ({ page }) => {
 | Chờ API response                 | **waitForResponse()**               |
 | Chờ 1 khoảng thời gian nhất định | **waitForTimeout()** (hạn chế dùng) |
 
-#
+# Demo 1408
+
+Từ codegen -> lấy được
+
+```ts
+import { test, expect } from "@playwright/test";
+
+test("test", async ({ page }) => {
+  await page.goto("https://crm.anhtester.com/admin/authentication");
+  await page.getByRole("textbox", { name: "Email Address" }).click();
+  await page
+    .getByRole("textbox", { name: "Email Address" })
+    .fill("admin@example.com");
+  await page.getByRole("textbox", { name: "Password" }).click();
+  await page.getByRole("textbox", { name: "Password" }).fill("123456");
+  await page.getByRole("checkbox", { name: "Remember me" }).check();
+  await page.getByRole("button", { name: "Login" }).click();
+});
+```
