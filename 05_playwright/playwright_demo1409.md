@@ -1,5 +1,13 @@
 # Demo Framework Design
 
+Mục tiêu: xây dựng nền tảng vững chắc, tối ưu và có khả năng mở rộng cho dự án kiểm thử tự động (Automation Testing Framework). Cụ thể, kết quả cần đạt được sau khi hoàn thành bước này bao gồm:
+
+- Test Structure: Nắm rõ và thiết lập được cấu trúc kịch bản kiểm thử chuẩn hóa bằng cách sử dụng các khối Describe, Test và Hooks (như beforeEach, afterEach).
+- Page Object Model (POM): Xây dựng các Page Class riêng biệt để quản lý UI element và các thao tác trên màn hình, giúp mã nguồn dễ bảo trì và tái sử dụng.
+- Test Data: Tổ chức và tách biệt dữ liệu kiểm thử ra khỏi mã nguồn bằng cách sử dụng các file JSON hoặc cơ chế Fixture.
+- Environment Config: Thiết lập cấu hình linh hoạt cho nhiều môi trường khác nhau (Dev, Staging, Prod) để dễ dàng chuyển đổi khi chạy test.
+- Utility Functions: Đóng gói các hàm dùng chung (Common Functions) phục vụ cho toàn bộ dự án (ví dụ: xử lý chuỗi, đọc file, định dạng dữ liệu).
+
 ## 1. Khởi tạo Project
 
 Bước 1: Tạo mới project
