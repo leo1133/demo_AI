@@ -294,3 +294,46 @@ test("test response body", async ({ request }) => {
 | Status code        | `response.status()`             |
 
 Điểm khác biệt lớn là Playwright đưa API testing vào cùng một test framework với UI testing, nên bạn có thể xây dựng end-to-end flow mà không cần chuyển qua lại giữa Postman và UI automation.
+
+# Khi làm dự án automation bằng playwright có nhất thiết phải làm cả API testing không?
+
+Không bắt buộc. Việc có nên thêm API Testing vào framework Playwright hay không phụ thuộc vào rất nhiều yếu tố của dự án.
+Điều quan trọng là hiểu mục tiêu của project automation.
+
+## Nếu mục tiêu là UI Automation thì chỉ cần UI
+
+Project của bạn chỉ muốn tự động hóa các chức năng trên giao diện:
+
+- Login, logout
+- CRUD products
+- CRUD users
+- ...
+  -> Chỉ cần UI Testing theo POM
+
+## Nếu project là E2E thì cần cả UI và API
+
+Dự án của bạn muốn kiểm tra flow người dùng từ đầu đến cuối, bao gồm cả UI và API:
+
+- Login
+- CRUD products
+- CRUD users
+- ...
+  -> Cần cả UI Testing và API Testing.
+  - UI Testing theo POM
+  - API Testing theo POJO hoặc Service POJO
+  - Test data dùng chung
+
+## Khi nào cần dùng API Testing
+
+API Testing nên được thêm vào khi nó mang lại lợi ích rõ ràng.
+
+- Chuẩn bị test data cho UI Testing
+- Cleanup data
+- Verify backend sau thao tác UI
+
+## Khi nào không cần API?
+
+- Chỉ xây dựng POM (thay vì POJO)
+- Test các chức năng UI cơ bản
+- Không có API hoặc không được access API
+- Mục tiêu chỉ là UI Regression
