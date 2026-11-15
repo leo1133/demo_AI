@@ -48,19 +48,20 @@ Git là hệ thống quản lý phiên bản phân tán (VCS). Mọi mã nguồn
 
 ```mermaid
 flowchart LR
-    subgraph Local Machine
+    subgraph LM ["Local Machine"]
         WD["1. Working Directory<br/>(Nơi code file .spec.ts)"]
         SA["2. Staging Area<br/>(Chờ commit: git add)"]
         LR["3. Local Repo<br/>(Lịch sử commit: git commit)"]
     end
-    subgraph Remote Server
+    subgraph RS ["Remote Server"]
         RR["4. Remote Repo<br/>(GitHub / GitLab / Bitbucket)"]
     end
 
     WD -- "git add" --> SA
     SA -- "git commit" --> LR
     LR -- "git push" --> RR
-    RR -- "git pull / fetch" --> Local Machine
+    RR -- "git pull" --> WD
+    RR -- "git fetch" --> LR
 ```
 
 1. **Working Directory:** Thư mục làm việc trên máy tính của bạn (nơi bạn thêm/sửa/xóa code).
